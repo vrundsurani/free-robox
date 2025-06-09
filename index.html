@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Roblox Username Login</title>
   <style>
     * {
@@ -11,6 +11,11 @@
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', sans-serif;
+    }
+
+    html, body {
+      touch-action: manipulation;
+      -ms-touch-action: manipulation; /* For IE */
     }
 
     body {
@@ -121,7 +126,6 @@
       display: none;
     }
     
-    
     .roblox-amount-row {
       display: flex;
       align-items: center;
@@ -141,7 +145,6 @@
       margin-bottom: 0;
     }
 
-    
     #success-popup {
       display: none; 
       position: fixed;
@@ -154,8 +157,6 @@
       backdrop-filter: blur(6px);
       justify-content: center;
       align-items: center;
-    
-      display: none;
     }
 
     #success-popup .popup-content {
@@ -185,7 +186,6 @@
     #success-popup .popup-content button:hover {
       background: #41007a;
     }
-
     
     @media (max-width: 600px) {
       body {
@@ -216,7 +216,6 @@
     <input type="text" id="username" placeholder="Username" />
     <button id="username-btn" onclick="submitUsername()">OK</button>
 
-     
     <div id="amount-section">
       <h2>Enter Roblox amount (max 100)</h2>
       <div class="roblox-amount-row">
@@ -226,11 +225,9 @@
       <button id="amount-btn" onclick="submitAmount()">Submit Amount</button>
     </div>
 
-    
     <p id="loading-message"></p>
   </div>
 
-  
   <div id="success-popup">
     <div class="popup-content">
       <p id="success-text"></p>
@@ -264,17 +261,14 @@
         return;
       }
 
-      
       document.getElementById('username').disabled = true;
       document.getElementById('username-btn').disabled = true;
 
       showLoading('Checking username...');
 
-      
       setTimeout(() => {
         hideLoading();
 
-      
         document.getElementById('amount-section').style.display = 'block';
       }, 3000);
     }
@@ -290,7 +284,6 @@
         return;
       }
 
-    
       amountInput.disabled = true;
       document.getElementById('amount-btn').disabled = true;
 
@@ -303,7 +296,6 @@
           clearInterval(countdownInterval);
           hideLoading();
 
-          
           const popup = document.getElementById('success-popup');
           const successText = document.getElementById('success-text');
           successText.textContent = `Success! Your ${amount} Roblox will be coded in 48 hours.`;
