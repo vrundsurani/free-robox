@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Roblox Username Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: #0a0022;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: white;
+      position: relative;
+      flex-direction: column;
+    }
+
+    .falling-roblox {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 150px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg') no-repeat center;
+      background-size: contain;
+      animation: fallBehind 5s ease-in-out forwards;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    @keyframes fallBehind {
+      0% {
+        top: -150px;
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.5;
+      }
+      100% {
+        top: 30%;
+        opacity: 0.1;
+      }
+    }
+
+    .login-box {
+      z-index: 2;
+      background: linear-gradient(to bottom, #22004d, #3c007d);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 0 20px #8000ff80;
+    }
+
+    .login-box h1 {
+      background: #a100ff;
+      padding: 15px 0;
+      font-size: 1.5rem;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      margin: -40px -40px 20px;
+    }
+
+    .login-box h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .login-box p {
+      font-size: 0.9rem;
+      color: #c6a3ff;
+      margin-bottom: 20px;
+    }
+
+    .login-box input[type="text"],
+    .login-box input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .login-box button {
+      width: 100%;
+      background: #a100ff;
+      color: white;
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-box button:hover {
+      background: #8100cc;
+    }
+
+    #amount-section {
+      display: none;
+      margin-top: 20px;
+    }
+
+    #loading-message {
+      margin-top: 20px;
+      font-size: 1rem;
+      color: #c6a3ff;
+      display: none;
+    }
+    
+    
+    .roblox-amount-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .roblox-amount-row img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    .roblox-amount-row input[type="number"] {
+      flex-grow: 1;
+      margin-bottom: 0;
+    }
+
+    
+    #success-popup {
+      display: none; 
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(10, 0, 34, 0.85);
+      backdrop-filter: blur(6px);
+      justify-content: center;
+      align-items: center;
+    
+      display: none;
+    }
+
+    #success-popup .popup-content {
+      background: linear-gradient(135deg, #a100ff, #6100b5);
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px #a100ffcc;
+      color: white;
+      max-width: 90%;
+      text-align: center;
+      font-size: 1.3rem;
+      position: relative;
+    }
+
+    #success-popup .popup-content button {
+      margin-top: 20px;
+      background: #6100b5;
+      padding: 12px 25px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+      color: white;
+    }
+
+    #success-popup .popup-content button:hover {
+      background: #41007a;
+    }
+
+    
+    @media (max-width: 600px) {
+      body {
+        justify-content: flex-start;
+        padding: 20px 0;
+      }
+      .login-box {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        padding: 60px 20px 20px;
+        box-shadow: none;
+      }
+      .falling-roblox {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="falling-roblox"></div>
+
+  <div class="login-box">
+    <h1>LOGIN</h1>
+    <h2>Write your Roblox username</h2>
+    <p><strong>Note:</strong> We will never ask for your password</p>
+
+    <input type="text" id="username" placeholder="Username" />
+    <button id="username-btn" onclick="submitUsername()">OK</button>
+
+     
+    <div id="amount-section">
+      <h2>Enter Roblox amount (max 100)</h2>
+      <div class="roblox-amount-row">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Robux_2019_Logo_gold.svg" alt="Roblox Logo" />
+        <input type="number" id="amount" placeholder="Amount" min="1" max="100" />
+      </div>
+      <button id="amount-btn" onclick="submitAmount()">Submit Amount</button>
+    </div>
+
+    
+    <p id="loading-message"></p>
+  </div>
+
+  
+  <div id="success-popup">
+    <div class="popup-content">
+      <p id="success-text"></p>
+      <button onclick="closeSuccessPopup()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    let countdownInterval;
+
+    function showLoading(message) {
+      const loadingEl = document.getElementById('loading-message');
+      loadingEl.textContent = message;
+      loadingEl.style.display = 'block';
+    }
+
+    function hideLoading() {
+      document.getElementById('loading-message').style.display = 'none';
+    }
+
+    function clearMessages() {
+      hideLoading();
+    }
+
+    function submitUsername() {
+      clearMessages();
+
+      const username = document.getElementById('username').value.trim();
+      if (username === '') {
+        alert('Please enter your Roblox username.');
+        return;
+      }
+
+      
+      document.getElementById('username').disabled = true;
+      document.getElementById('username-btn').disabled = true;
+
+      showLoading('Checking username...');
+
+      
+      setTimeout(() => {
+        hideLoading();
+
+      
+        document.getElementById('amount-section').style.display = 'block';
+      }, 3000);
+    }
+
+    function submitAmount() {
+      clearMessages();
+
+      const amountInput = document.getElementById('amount');
+      const amount = parseInt(amountInput.value, 10);
+
+      if (isNaN(amount) || amount < 1 || amount > 100) {
+        alert('Please enter a valid amount between 1 and 100.');
+        return;
+      }
+
+    
+      amountInput.disabled = true;
+      document.getElementById('amount-btn').disabled = true;
+
+      let timeLeft = 20;
+      showLoading(`Processing your Roblox code. Please wait ${timeLeft} seconds...`);
+
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          hideLoading();
+
+          
+          const popup = document.getElementById('success-popup');
+          const successText = document.getElementById('success-text');
+          successText.textContent = `Success! Your ${amount} Roblox will be coded in 48 hours.`;
+          popup.style.display = 'flex';
+        } else {
+          showLoading(`Processing your Roblox code. Please wait ${timeLeft} seconds...`);
+        }
+      }, 1000);
+    }
+
+    function closeSuccessPopup() {
+      const popup = document.getElementById('success-popup');
+      popup.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
